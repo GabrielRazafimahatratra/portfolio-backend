@@ -1,0 +1,16 @@
+services:
+  - type: web
+    env: docker
+    name: nestjs-app
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          type: postgres
+          property: connectionString
+    plan:
+      - apt-get -y update
+      - apt-get -y install -qq postgresql-client
+    commands:
+      - npm install
+      - npx prisma migrate deploy
+    startCommand: npm run start:migrate
